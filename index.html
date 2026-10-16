@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart School Management</title>
+  
+  <!-- โหลดไลบรารีที่จำเป็น -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+  <!-- เชื่อมไฟล์ CSS ของเรา -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-700 antialiased overflow-x-hidden">
+
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+  <div class="tech-ambient"></div>
+
+  <!-- 🌟 แถบเมนูด้านซ้าย (จัดกลุ่มใหม่ เรียบง่ายขึ้น) 🌟 -->
+  <aside id="tech-sidebar" class="fixed top-0 bottom-0 left-0 flex flex-col z-50 overflow-hidden select-none">
+    
+    <div class="h-20 flex items-center gap-3.5 px-5 border-b border-indigo-100/80 bg-gradient-to-r from-violet-100/90 via-indigo-50/80 to-pink-100/80 shrink-0 relative overflow-hidden">
+      <div class="w-12 h-12 rounded-2xl bg-white p-1.5 shadow-md flex items-center justify-center shrink-0">
+        <img src="https://s.imgz.io/2026/10/02/fb629284c6f02a394eba053aa58c3551301b931893e695c6.png" alt="Logo" class="w-full h-full object-contain">
+      </div>
+      <div class="leading-tight">
+        <h1 class="text-slate-900 font-black text-[15.5px]">Smart School</h1>
+        <span class="text-[10px] font-extrabold text-indigo-700 bg-white/95 px-2 rounded-md">Management</span>
+      </div>
+    </div>
+
+    <!-- เมนูหลักที่ถูกจัดหมวดหมู่ใหม่ให้ดูง่าย -->
+    <div class="flex-1 overflow-y-auto py-3 space-y-1">
+      
+      <div class="nav-item active" data-page="page-landing" onclick="showPage('page-landing')">
+        <div class="nav-icon text-indigo-500"><i class="fa-solid fa-house"></i></div>
+        <span>หน้าหลัก (Dashboard)</span>
+      </div>
+
+      <div class="nav-group-title">📚 หมวดวิชาการ</div>
+      <div class="nav-item" data-page="page-checkin" onclick="showPage('page-checkin')">
+        <div class="nav-icon text-sky-500"><i class="fa-solid fa-qrcode"></i></div><span>เช็คชื่อเข้าเรียน (QR)</span>
+      </div>
+      <div class="nav-item" data-page="page-score" onclick="showPage('page-score')">
+        <div class="nav-icon text-amber-500"><i class="fa-solid fa-ranking-star"></i></div><span>สมุดคะแนน (Gradebook)</span>
+      </div>
+      <div class="nav-item" data-page="page-assignment" onclick="showPage('page-assignment')">
+        <div class="nav-icon text-pink-500"><i class="fa-solid fa-clipboard-check"></i></div><span>เช็คส่งงาน/การบ้าน</span>
+      </div>
+      <div class="nav-item" data-page="page-remedial" onclick="showPage('page-remedial')">
+        <div class="nav-icon text-rose-500"><i class="fa-solid fa-rotate-left"></i></div><span>ซ่อมเสริม (แก้ มส./0)</span>
+      </div>
+
+      <div class="nav-group-title">🛡️ หมวดดูแลนักเรียน</div>
+      <div class="nav-item" data-page="page-homeroom" onclick="showPage('page-homeroom')">
+        <div class="nav-icon text-purple-500"><i class="fa-solid fa-bell"></i></div><span>โฮมรูม & ใบลา</span>
+      </div>
+      <div class="nav-item" data-page="page-home-visit" onclick="showPage('page-home-visit')">
+        <div class="nav-icon text-indigo-500"><i class="fa-solid fa-house-user"></i></div><span>ระบบเยี่ยมบ้าน (GPS)</span>
+      </div>
+      <div class="nav-item" data-page="page-sdq" onclick="showPage('page-sdq')">
+        <div class="nav-icon text-sky-500"><i class="fa-solid fa-heart-pulse"></i></div><span>ประเมิน SDQ</span>
+      </div>
+      <div class="nav-item" data-page="page-health" onclick="showPage('page-health')">
+        <div class="nav-icon text-emerald-500"><i class="fa-solid fa-weight-scale"></i></div><span>สุขภาพ & BMI</span>
+      </div>
+
+      <div class="nav-group-title">⚙️ ตั้งค่าระบบ</div>
+      <div class="nav-item" data-page="page-students" onclick="showPage('page-students')">
+        <div class="nav-icon text-slate-500"><i class="fa-solid fa-users-gear"></i></div><span>จัดการรายชื่อนักเรียน</span>
+      </div>
+      <div class="nav-item" data-page="page-addClass" onclick="showPage('page-addClass')">
+        <div class="nav-icon text-slate-500"><i class="fa-solid fa-calendar-plus"></i></div><span>จัดการตารางสอน</span>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- 🌟 ส่วนแสดงผลฝั่งขวา (Content Area) 🌟 -->
+  <div id="main-content-wrapper" class="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
+    
+    <!-- Topbar -->
+    <header id="tech-topbar" class="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 sticky top-0 z-30 px-4 md:px-8 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+        <div>
+          <h2 id="topbarPageTitle" class="text-lg md:text-xl font-bold text-slate-800">หน้าหลัก (Dashboard)</h2>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 w-full block">
+
+      <!-- ==================== หน้าหลัก ==================== -->
+      <div id="page-landing" class="page active">
+        <div class="max-w-7xl mx-auto space-y-6">
+          <div class="glass-card p-8 bg-gradient-to-r from-violet-100 to-pink-100">
+            <h1 class="text-3xl font-black text-slate-800">ยินดีต้อนรับสู่ระบบบริหารจัดการชั้นเรียน</h1>
+            <p class="text-slate-600 mt-2">เวอร์ชันเชื่อมต่อ Cloudflare (ความเร็วสูง)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- โครงหน้าอื่นๆ (เราจะค่อยๆ ทยอยเอาเนื้อหามาใส่ครับ เพื่อไม่ให้งง) -->
+      <div id="page-checkin" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">ระบบเช็คชื่อเข้าเรียน</h2><p>กำลังโหลดข้อมูลจาก Cloudflare...</p></div></div>
+      <div id="page-score" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">สมุดคะแนน (Gradebook)</h2></div></div>
+      <div id="page-assignment" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">ระบบตรวจงาน</h2></div></div>
+      <div id="page-remedial" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">ระบบซ่อมเสริม</h2></div></div>
+      <div id="page-homeroom" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">โฮมรูมและใบลา</h2></div></div>
+      <div id="page-home-visit" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">ระบบเยี่ยมบ้าน</h2></div></div>
+      <div id="page-sdq" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">ประเมินพฤติกรรม SDQ</h2></div></div>
+      <div id="page-health" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">สุขภาพและ BMI</h2></div></div>
+      <div id="page-students" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">จัดการรายชื่อนักเรียน</h2></div></div>
+      <div id="page-addClass" class="page"><div class="glass-card p-8"><h2 class="text-2xl font-bold">จัดการตารางสอน</h2></div></div>
+
+    </main>
+  </div>
+
+  <div class="toast-container"></div>
+  
+  <!-- เชื่อมไฟล์ JavaScript ของเรา -->
+  <script src="app.js"></script>
+
+</body>
+</html>
