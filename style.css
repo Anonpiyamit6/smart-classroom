@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+* { 
+  font-family: 'Sarabun', sans-serif; 
+  -webkit-tap-highlight-color: transparent; 
+}
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+:root {
+  --sidebar-width: 280px;
+}
+
+body { 
+  background-color: #f8fafc; 
+  color: #1e293b; 
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.tech-ambient {
+  position: fixed;
+  top: 0; left: var(--sidebar-width); right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.tech-ambient::before {
+  content: ""; position: absolute; top: -15%; right: -10%; width: 45vw; height: 45vw;
+  background: radial-gradient(circle, rgba(199, 210, 254, 0.45) 0%, rgba(255,255,255,0) 70%);
+  filter: blur(80px);
+}
+
+#tech-sidebar {
+  width: var(--sidebar-width);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid #f0f2f6;
+  box-shadow: 4px 0 25px rgba(148, 163, 184, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.nav-group-title {
+  font-size: 11px; font-weight: 700; color: #94a3b8; padding: 16px 20px 6px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 16px; margin: 2px 12px;
+  border-radius: 14px; color: #64748b; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: #f8fafc; color: #4338ca; transform: translateX(3px);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+  color: #4f46e5; font-weight: 700;
+  border: 1px solid #e0e7ff;
+}
+
+.nav-item .nav-icon {
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.06);
+}
+
+.page { display: none; }
+.page.active { display: block; animation: fadeInSlide 0.3s ease; }
+
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+  #tech-sidebar { transform: translateX(-100%); }
+  #tech-sidebar.mobile-open { transform: translateX(0); }
+  #main-content-wrapper { margin-left: 0 !important; width: 100% !important; }
+}
